@@ -19,6 +19,19 @@ makeColorsList ([[Color, CantColor] | BagL], List): - append (List, [Color]), Ca
 %Select a random (Color) tile from the bag (Bag)
 takeTileRandomBag (Bag, Color, BagR): - makeColorsList (Bag, List), lenght (List, L), random (0, L, I), nth0 (I, List, Color), putNColorBag (Bag, Color, BagR) .
 
+%putTileFactory / 3
+%putTileFactory (Factory, Color, FactoryR)
+%Adds a random (Color) tile from the factory.
+putTileFactory ([[Color, CantColor] | FactoryL], Color, [[Color, CantColorR] | FactoryLR]): - CantColorR is CantColor + 1,!.
+putTileFactory ([[OtherColor, CantOtroColor] | FactoryL], Color, [[OtherColor, CantOtroColor] | FactoryLR]): - putTileFactory (FactoryL, Color, FactoryLR).
+
+%takeNTilesBagForFactory / 5
+%takeNTilesBagForFactory (Bag, Factory, Quantity, ManufactureR, BagR)
+%Select Qty of random tiles from factory bag.
+takeNTilesBagForFactory (Bag, Factory, 0, FactoryR, BagR): - !.
+takeNTilesBagForFactory ([[blue, 0], [yellow, 0], [white, 0], [black, 0], [red, 0]], Factory, _, Factory, [[blue, 0], [yellow, 0], [white, 0], [black, 0], [red, 0]]): - !.
+takeNTilesBagForFactory (Bag, Factory, Qty, FactoryR, BagR]): - takeTileRandomBag (Bag, Color, BagT), putTileFactory (Factory, Color, FactoryT), CantR is Cant-1, takeNTilesBagForFactory (BagT, FactoryT, CantR, FactoryR, BagR ).
+
 %putNColorBag / 4
 %putNColorBag (Bag, Color, Quantity, BagR)
 %Puts N Color tiles in the bag.
