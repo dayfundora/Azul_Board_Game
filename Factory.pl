@@ -2,6 +2,7 @@
 %*****Factory*****%
 %*****************%
 :-["Bag.pl"].
+:-["Center.pl"].
 
 
 %initializeFactory / 1
@@ -39,3 +40,18 @@ fillFactory ([Factory | FactoriesList], Bag, [FactoryR | FactoriesListR], BagR):
 %Generates a list of N Factories (FactoriesR) with 4 elements in each.
 makeNFactories (0, Bag, [], Bag): - !.
 makeNFactories (N, Bag, [Factory | FactoriesL], BagR): - initializeFactory (FactoryT), takeNTilesBagForFactory (Bag, FactoryT, 4, Factory, BagT), N2 is N-1, makeNFactories (N2, BagT, FactoriesL, BagR) .
+
+%selectTilesFactoryColor / 6
+%selectTilesFactoryColor (Factory, Center, Color, FactoriesR, CenterR, CantColor): -
+%Selects tiles of one color (Color) from a Factory (Factory) and takes the rest to the Center (Center).
+selectTilesFactoryColor ([[[blue, 0], [yellow, 0], [white, 0], [black, 0], [red, 0]], Center, Color, FactoryR, Center, 0): - initializeFactory (FactoriesR ),!.
+selectTilesFactoryColor ([Color, CantColor] | List], Center, Color, FactoryR, CenterR, CantColor): - initializeFactory (FactoriesR), putCenterColorList (Center, List, CenterR),!.
+selectTilesFactoryColor ([OtroColor, CantOtroColor] | List], Center, Color, FactoryR, CenterR, CantColor): - putCenterColorList (Center, [[OtroColor, CantOtroColor]], CenterT), selectTilesFactoryColor (List, CenterT, Color, FactoryR, CenterR CantColor).
+
+
+%removeColorFromFactory / 7
+%removeColorFromFactory (Factories, FactorySelect, Center, CenterR, FactoriesR, Color, CantColor)
+%From a specific Factory (FactoriesSelect) selects a color from the rest in the Center and returns all Factories (FactoriesR) with the modification.
+removeColorFromFactory ([], _, Center, Center, [], _, 0): - !.
+removeColorFromFactory ([FactorySelect | FactoryList], FactorySelect, Center, CenterR, [FactorySelectR | FactoryList], Color, CantColor): - selectTilesFactoryColor (FactorySelect, Center, Color, FactorysSelecR, CenterR, CantColor),!.
+removeColorFromFactory ([OtraFactory | FactoryList], FactorySelect, Center, CenterR, [OtraFactory | FactoryListR], Color, CantColor): - removeColorFromFactory (FactoryList, FactorySelect, Center, CenterR, FactoryListR, Color, CantColor).
