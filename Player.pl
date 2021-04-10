@@ -100,3 +100,24 @@ adjacentTop(_, _, _, Score, Score) :- !.
 adjacentBottom(5, _, _, Score, Score) :- !.
 adjacentBottom(I, J, Wall, Score, ScoreR) :-ColorPositionIJ(Wall, I, J,_, true), I1 is I+1, ScoreT is Score + 1, !, adjacentBottom(I1, J, Wall, ScoreT, ScoreR).
 adjacentBottom(_, _, _, Score, Score) :- !.
+
+
+%_________________%
+%       Floor     %
+%_________________%
+
+%The Floor has 7 squares, each one has negative points, and a square cannot be used without all the previous ones being occupied
+%The 1 and 2 value -1, the 3, 4 and 5 value -3, the 6 and 7 value -3.
+scoreFloor(0,0).
+scoreFloor(1,1).
+scoreFloor(2,2).
+scoreFloor(3,4).
+scoreFloor(4,6).
+scoreFloor(5,8).
+scoreFloor(6,11).
+scoreFloor(7,14).
+
+%scoreTotalFloor/2
+%scoreTotalFloor(Floor,Score)
+%Gives the total scorethat must be subtracted by the number of tiles on the Floor
+scoreTotalFloor(Floor,Score):-lenght(Floor,N),scoreFloor(N,Score).
