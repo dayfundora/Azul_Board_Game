@@ -61,3 +61,42 @@ putColorRow(Color,[OtherColor|L],[OtherColor|LR]):-putColorRow(Color,L,LR).
 %Given a row (Row) puts the tile of that color (Color) of the wall (Wall).
 putColorWall(0,Color,[Row|L],[RowR|L]):-putColorRow(Color,Row,RowR),!.
 putColorWall(F,Color,[Row|L],[Row|LR]):-N is F-1,putColorWall(N,Color,L,LR).
+
+%scoreIJ/4
+%scoreIJ(Wall,I,J,Score)
+% Given a tile (I, J) on the wall (Wall), the score (Score) of placing a tile on that square.
+scoreIJ(Wall,I,J,Score):-Left is I-1, Right is I+1, Top is J-1, Bot is J+1,
+                                   adjacentLeft(I, Left, Wall, 0, CantLeft),
+                                   adjacentRight(I, Right, Wall, 0, CantRight),
+                                   adjacentTop(Top, J, Wall, 0, CantTop),
+                                   adjacentBottom(Bot, J, Wall, 0, CantBottom),
+                                   Score is CantLeft + CantRight + CantTop + CantBottom + 1.
+
+%adjacentLeft/5
+%adjacentLeft(I,J,Wall,Score,ScoreR)
+%Given a tile (I, J) on the wall (Wall), the score (Score) of his adjacent on the left.
+adjacentLeft(_, -1, _, Score, Score) :- !.
+adjacentLeft(I, J, Wall, Score, ScoreR) :-ColorPositionIJ(Wall, I, J,_, true), J1 is J-1, ScoreT is Score + 1, !, adjacentLeft(I, J1, Wall, ScoreT, ScoreR).
+adjacentLeft(_, _, _, Score, Score) :- !.
+
+%adjacentRight/5
+%adjacentRight(I,J,Wall,Score,ScoreR)
+% Given a tile (I, J) on the wall (Wall), the score (Score) of his adjacent on the right.
+adjacentRight(_, 5, _, Score, Score) :- !.
+adjacentRight(I, J, Wall, Score, ScoreR) :-ColorPositionIJ(Wall, I, J,_, true), J1 is J+1, ScoreT is Score + 1, !, adjacentRight(I, J1, Wall, ScoreT, ScoreR).
+adjacentRight(_, _, _, Score, Score) :- !.
+
+%adjacentTop/5
+%adjacentTop(I,J,Wall,Score,ScoreR)
+%Given a tile (I, J) on the wall (Wall), the score (Score) of his adjacent on the top.
+adjacentTop(-1, _, _, Score, Score) :- !.
+adjacentTop(I, J, Wall, Score, ScoreR) :-ColorPositionIJ(Wall, I, J,_, true), I1 is I-1, ScoreT is Score + 1, !, adjacentTop(I1, J, Wall, ScoreT, ScoreR).
+adjacentTop(_, _, _, Score, Score) :- !.
+
+
+%adjacentBottom/5
+%adjacentBottom(I,J,Wall,Score,ScoreR)
+%Given a tile (I, J) on the wall (Wall), the score (Score) of his adjacent on the bottom.
+adjacentBottom(5, _, _, Score, Score) :- !.
+adjacentBottom(I, J, Wall, Score, ScoreR) :-ColorPositionIJ(Wall, I, J,_, true), I1 is I+1, ScoreT is Score + 1, !, adjacentBottom(I1, J, Wall, ScoreT, ScoreR).
+adjacentBottom(_, _, _, Score, Score) :- !.
