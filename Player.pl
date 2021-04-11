@@ -1,7 +1,7 @@
 %*****************%
 %*****PLAYER******%
 %*****************%
-
+:-["Cover.pl"].
 
 %inicializePlayer/1
 %inicializePlayer([Wall,PatternLine,Floor,Score,Strategy])
@@ -116,6 +116,24 @@ scoreFloor(4,6).
 scoreFloor(5,8).
 scoreFloor(6,11).
 scoreFloor(7,14).
+
+%setFloorColor/5
+%setFloorColor(Floor,Cover,Color,FloorR,CoverR)
+%Wrapper to setFloorColorCover
+setFloorColor(Floor,Cover,Color,FloorR,CoverR):-lenght(Floor,N),setFloorColorCover(Floor,Cover,Color,N,FloorR,CoverR).
+
+
+%setFloorColorCover/6
+%setFloorColorCover(Floor,Cover,Color,N,FloorR,CoverR)
+%put a color (Color) on the floor, if it is full (N) it is put on the cover
+setFloorColorCover(Floor,Cover,Color,7,Floor,CoverR):-putNColorsCover(Cover,Color,1,CoverR),!.
+setFloorColorCover(Floor,Cover,Color,_,FloorR,Cover):-append(Floor,[Color],FloorR).
+
+%setFloorColorsCover/5
+%setFloorColorsCover(Floor,Cover,[Color,CantColor],FloorR,CoverR)
+%put N tiles of color (Color) on the floor
+setFloorColorsCover(Floor,Cover,[_,0],Floor,Cover):-!.
+setFloorColorsCover(Floor,Cover,[Color,CantColor],,FloorR,CoverR):-setFloorColor(Floor,Cover,Color,FloorT,CoverT),CantColorRis CantColor-1,setFloorColorsCover(FloorT,CoverT,[Color,CantColorR],FloorR,CoverR).
 
 %scoreTotalFloor/2
 %scoreTotalFloor(Floor,Score)
