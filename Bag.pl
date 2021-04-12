@@ -43,3 +43,9 @@ putNColorBag ([[OtherColor, QtyOtherColor] | BagL], Color, Qty, [[OtherColor, Qt
 %Puts a list of colors (with their respective quantities in the bag color tiles Color in the bag.
 putNColorsBag (Bag, [], Bag): - !.
 putNColorsBag (Bag, [[Color, Qty], L], BagR): - putNColorBag (Bag, Color, Qty, BagT), putNColorsBag (BagT, L, BagR).
+
+%putFloorBag / 3
+%putFloorBag (Bag, ColorList, BagR)
+%Puts a list of colors (without quantities) in the bag.
+putFloorBag (Bag, [], Bag): -!
+putFloorBag (Bag, [Color | ColorList], BagR): - putNColorBag (Bag, Color, 1, BagT), putFloorBag (BagT, ListColor, BagR).
