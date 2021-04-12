@@ -26,3 +26,9 @@ putNColorCover ([[OtherColor, CantOtherColor] | CoverL], Color, Cant, [[OtherCol
 %Put a list of colors (with their respective Quantityes) in the Cover.
 putNColorsCover (Cover, [], Cover): - !.
 putNColorsCover (Cover, [[Color, Qty], L], CoverR): - putNColorCover (Cover, Color, Qty, CoverT), putNColorsCover (CoverT, L, CoverR).
+
+%putFloorCover / 3
+%putFloorCover (Cover, ListColor, CoverR)
+%Puts a list of colors (without quantity) on the Cover.
+putFloorCover (Cover, [], Cover): -!
+putFloorCover (Cover, [Color | ListColor], CoverR): - putNColorCover (Cover, Color, 1, CoverT), putFloorCover (CoverT, ListColor, CoverR).
