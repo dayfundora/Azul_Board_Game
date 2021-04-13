@@ -155,3 +155,9 @@ initializePatternLines([[noColor,1,1],[noColor,2,2],[noColor,3,3],[noColor,4,4],
 %When putting a quantity of tiles (CantColor) of color (Color) in a line of the pattern, how many tiles are left over and how much space is left.
 canPutPattern([Color,Row,CantEmpty],Wall,[Color,CantColor],LeftOverTile,LeftOverSpace):- I is Row-1, ColorPositionIJ(Wall,I,J,Color,0),!,LeftOverTile is max(0,CantColor-CantEmpty),LeftOverSpace is max(0,CantEmpty-CantColor).
 canPutPattern([noColor,Row,Row],Wall,[Color,CantColor],LeftOverTile,LeftOverSpace):- I is Row-1, ColorPositionIJ(Wall,I,J,Color,0),!,LeftOverTile is max(0,CantColor-Row),LeftOverSpace is max(0,Row-CantColor).
+
+%moveTilePattern/5
+%moveTilePattern(PatternLine,[Color,CantColor],PatternLineR)
+%puts an amount of tiles (CantColor) of color (Color) in a pattern line.
+moveTilePattern([_,Row,Row],[Color,CantColor],[Color,Row,CantEmpty]):-CantEmpty is N-CantColor,!.
+moveTilePattern([Color,N,CantEmpty],[Color,CantColor],[Color,Row,CantEmptyR]):-CantEmptyR is CantEmpty-CantColor,!.
