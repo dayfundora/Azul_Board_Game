@@ -149,3 +149,9 @@ scoreTotalFloor(Floor,Score):-lenght(Floor,N),scoreFloor(N,Score).
 %initializePatternLines(PatternLines)
 %Initialize a Player Pattern, which is a fixed structure, each line has [Color, Row, EmptyTileQuantity].
 initializePatternLines([[noColor,1,1],[noColor,2,2],[noColor,3,3],[noColor,4,4],[noColor,5,5]]).
+
+%canPutPattern/5
+%canPutPattern(PatternLine,Wall,[Color,CantColor],LeftOverTile,LeftOverSpace)
+%When putting a quantity of tiles (CantColor) of color (Color) in a line of the pattern, how many tiles are left over and how much space is left.
+canPutPattern([Color,Row,CantEmpty],Wall,[Color,CantColor],LeftOverTile,LeftOverSpace):- I is Row-1, ColorPositionIJ(Wall,I,J,Color,0),!,LeftOverTile is max(0,CantColor-CantEmpty),LeftOverSpace is max(0,CantEmpty-CantColor).
+canPutPattern([noColor,Row,Row],Wall,[Color,CantColor],LeftOverTile,LeftOverSpace):- I is Row-1, ColorPositionIJ(Wall,I,J,Color,0),!,LeftOverTile is max(0,CantColor-Row),LeftOverSpace is max(0,Row-CantColor).
