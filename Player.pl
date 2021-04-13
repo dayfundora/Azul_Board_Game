@@ -139,3 +139,13 @@ setFloorColorsCover(Floor,Cover,[Color,CantColor],,FloorR,CoverR):-setFloorColor
 %scoreTotalFloor(Floor,Score)
 %Gives the total scorethat must be subtracted by the number of tiles on the Floor
 scoreTotalFloor(Floor,Score):-lenght(Floor,N),scoreFloor(N,Score).
+
+
+%__________________%
+%   Pattern Lines  %
+%__________________%
+
+%initializePatternLines/1
+%initializePatternLines(PatternLines)
+%Initialize a Player Pattern, which is a fixed structure, each line has [Color, Row, EmptyTileQuantity].
+initializePatternLines([[noColor,1,1],[noColor,2,2],[noColor,3,3],[noColor,4,4],[noColor,5,5]]).
