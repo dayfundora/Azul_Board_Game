@@ -161,3 +161,20 @@ canPutPattern([noColor,Row,Row],Wall,[Color,CantColor],LeftOverTile,LeftOverSpac
 %puts an amount of tiles (CantColor) of color (Color) in a pattern line.
 moveTilePattern([_,Row,Row],[Color,CantColor],[Color,Row,CantEmpty]):-CantEmpty is N-CantColor,!.
 moveTilePattern([Color,N,CantEmpty],[Color,CantColor],[Color,Row,CantEmptyR]):-CantEmptyR is CantEmpty-CantColor,!.
+
+%moveTilePatternWallCover/5
+%moveTilePatternWallCover(Wall,Cover,PatternLine,Score,WallR,CoverR,PatternLineR,ScoreR)
+%moves a completed Pattern Line to the Wall and the remaining tiles to the Cover and returns the score for putting that tile on the Wall.
+moveTilePatternWallCover(Wall,Cover,[Color,Row,0],Score,WallR,CoverR,PatternLineR,ScoreR):-I is Row-1,ColorPositionIJ(Wall,I,J,Color,true),putColorWall(Row,Color,Wall,WallT), putNColorCover(Cover,Color,I,CoverR),scoreIJ(Wall,I,J,ScoreT),ScoreR is ScoreT+Score.
+
+%moveTilePatternFloorCover/9
+%moveTilePatternFloorCover(PatternLine,Cover,Floor,Color,CantColor,Row,PatternLineR,CoverR,FloorR)
+%moves some tiles (CantColor) of a color Color to the Pattern Line number (Row) and those that remain go to the Floor or to the Cover
+moveTilePatternFloorCover([_,Row,CantEmpty],Cover,Floor,Color,CantColor,Row,PatternLineR,CoverR,FloorR):-CantPonerEnPatternLine is min(CantColor,CantEmpty),CantSobran is CantEmpty-CantPonerEnPatternLine, moveTilePattern([_,Row,CantEmpty],[Color,CantPonerEnPatternLine],PatternLineR),setFloorColorsCover(Floor,Cover,[Color,CantSobran],FloorR,CoverR).
+
+%moveTilePatternsFloorCover/9
+%moveTilePatternsFloorCover(PatternLine,Cover,Floor,Color,CantColor,Row,PatternLineR,CoverR,FloorR)
+%moves some tiles (CantColor) of a color Color to the Pattern Line number (Row) and those that remain go to the Floor or to the Cover
+moveTilePatternsFloorCover([],Cover,Floor,_,_,_,[],Cover,Floor):-!.
+moveTilePatternsFloorCover([[AnyColor,OtherRow,CantEmpty]|PatternLineList],Cover,Floor,Color,CantColor,Row,[[AnyColor,OtherRow,CantEmpty]|PatternLineListR],CoverR,ScoreR):-moveTilePatternsFloorCover(PatternLineList,Cover,Floor,Color,CantColor,Row,PatternLineListR,CoverR,FloorR).
+moveTilePatternsFloorCover([[AnyColor,Row,CantEmpty]|PatternLineList],Cover,Floor,Color,CantColor,Row,[[AnyColor,Row,CantEmptyR]|PatternLineList],CoverR,FloorR):-moveTilePatternFloorCover([AnyColor,Row,CantEmpty],Cover,Floor,Color,CantColor,[AnyColor,Row,CantEmptyR],CoverR,FloorR).
