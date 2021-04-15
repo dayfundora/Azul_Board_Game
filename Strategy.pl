@@ -18,6 +18,14 @@ strategy (0, [Play | PlayListR], Play): - !.
 strategy (1, PlayList, PlayR): - lenght (PlayList, N), random (0, N, M), nth0 (M, PlayList, PlayR),!.
 strategy (2, PlayList, PlayR): - sort (4, @> =, PlayList], [PlayR | PlayListR]): - !.
 
+%greedyStrategy / 7
+%greedyStrategy (Player, Factorys, Center, PatternRowR, TakeCenterBoolR, ColorR, FactorySelecR)
+%strategy that returns the place where to catch the tiles (Fabicaso or Center), Color to Pick and row of the pattern where to play.
+greedyStrategy (Player, Factorys, Center, PatternRowR, TakeCenterBoolR, ColorR, PlaceR): -
+append (Factorys, Center, Places),
+tryEveryPlace (Places, [PlaceR, PatternRowR, ColorR, Punt]),
+whatPlace (Place, Factorys, Center, TakeCenterBoolR).
+
 %allPlays / 4
 %allPlays (Player, Factorys, Center, PlayListR)
 %all possible and valid moves
