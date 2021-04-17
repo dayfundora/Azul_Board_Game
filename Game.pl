@@ -8,6 +8,16 @@
 :-["Cover.pl"].
 :-["Strategy.pl"].
 
+%initializeGame/1
+%initializeGame(cantPlayers)
+%Initialize a Game, this is the main, it only needs how many players (cantPlayers).
+initializeGame(cantPlayers):-
+ print('  Start Game '),
+ prepareGame(cantPlayers,Players,Bag,Factories,Center,Cover),
+ play(Players,Bag,Factories,Center,Cover,IsOver,PlayersT),
+ extraPoints(PlayersT,PlayersR),
+ getWinners(PlayersR,Winners).
+
 %prepareGame/6
 %prepareGame(cantPlayers,Players,Bag,Factories,Center,Cover)
 %Is in charge of initializing the board (Players, Bag, Factories, Center)
@@ -74,3 +84,37 @@ moveFullPatternLinesToWall(Wall,[PatternLine|PatternLinesList],Cover,Score,WallR
 %Make the necessary preparations to start a new round.
 %In this method is where players are ordered in this round.
 prepareNextRound(Players,Bag,Factories,Center,Cover,PlayersR,BagR,FactoriesR,CenterR,CoverR):-lenght(Factories,N),CantAzulejos is N*4,bolsaSuficiente(Bag,CantAzulejos),initializeCover(Bag,Cover,BagT,CoverT),fillFactory(Factories,BagT,FactoriesR,BagR)
+
+%extraPoints/2
+%extraPoints(Players,PlayersR)
+%After the strategy is selected, the factory or center tile selection is applied and placed on the selected pattern line.
+extraPoints([],[]):-print('  Extra Points')!.
+extraPoints([Player|PlayersList],[PlayerR|PlayersListR]):-puntoExtraPlayer(Player,PlayerR),extraPoints(PlayersList,PlayersListR).
+
+%extraPoints/2
+%extraPoints(Player,PlayerR)
+%When a game is over, calculate the extra points if a player row, column or color was completed (Player)
+extraPoints([Wall,PatternLines,Suelo,Score,Strategy],[Wall,PatternLines,Suelo,ScoreR,Strategy]):- pointsFullLines(Wall,PointsFullLines), pointsFullColumns(Wall,PuntosColumnasCompletas), pointsFullColors(Wall,PuntosColoresCompletos), ScoreR is pointsFullLines + PuntosColumnasCompletas + PuntosColoresCompletos.
+
+
+%checkFull/2
+%checkFull(Fila, Llena)
+%LLena es 1 si la fila(Fila) esta llena en otro caso es 0
+checkFull([[_,true],[_,true],[_,true],[_,true],[_,true]], 1) :- !.
+checkFull(_, 0) :- !.
+
+%pointsFullLines/2
+%pointsFullLines(Wall,Score)
+%Score depending on how many complete lines you have on the wall
+pointsFullLines(Wall,PointsFullLines):-RowWall(0, Wall, F0), comprobarFila(F0, P0),RowWall(1, Wall, F1), comprobarFila(F1, P1),RowWall(2, Wall, F2), comprobarFila(F2, P2),RowWall(3, Wall, F3), comprobarFila(F3, P3),RowWall(4, Wall, F4), comprobarFila(F4, P4),Score is P0 + P1 + P2 + P3 + P4.
+
+%pointsFullColumns/2
+%pointsFullColumns(Wall,PointsFullColumns)
+%Score depending on how many complete columns you have on the wall
+pointsFullColumns(Wall,Score):-ColumnWall(0, Wall, C0), checkFull(C0, P0),ColumnWall(1, Wall, C1), checkFull(C1, P1),ColumnWall(2, Wall, C2), checkFull(C2, P2),ColumnWall(3, Wall, C3), checkFull(C3, P3),ColumnWall(4, Wall, C4), checkFull(C4, P4),Score is P0 + P1 + P2 + P3 + P4.
+
+    
+%pointsFullColors/2
+%pointsFullColors(Wall,PointsFullColors)
+%Score depending on how many complete colors you have on the wall
+pointsFullColors(Wall,Score):-ColorWall(blue, Wall, C0), checkFull(C0, P0),ColorWall(yellow, Wall, C1), checkFull(C1, P1),ColorWall(white, Wall, C2), checkFull(C2, P2),ColorWall(black, Wall, C3), checkFull(C3, P3), ColorWall(red, Wall, C4), checkFull(C4, P4),Score is P0 + P1 + P2 + P3 + P4.
