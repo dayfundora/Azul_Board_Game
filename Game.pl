@@ -118,3 +118,13 @@ pointsFullColumns(Wall,Score):-ColumnWall(0, Wall, C0), checkFull(C0, P0),Column
 %pointsFullColors(Wall,PointsFullColors)
 %Score depending on how many complete colors you have on the wall
 pointsFullColors(Wall,Score):-ColorWall(blue, Wall, C0), checkFull(C0, P0),ColorWall(yellow, Wall, C1), checkFull(C1, P1),ColorWall(white, Wall, C2), checkFull(C2, P2),ColorWall(black, Wall, C3), checkFull(C3, P3), ColorWall(red, Wall, C4), checkFull(C4, P4),Score is P0 + P1 + P2 + P3 + P4.
+
+%getWinners/2
+%getWinners(PlayersR,Winners)
+%Return players with best score
+getWinners(PlayersR,Winner):-sort(4,@>=,Players,[Winner|WinnersLista]),print('Winner:'),nl,nl,printPlayer(Winner),nl,nl.
+
+%printPlayer/1
+%printPlayer(Player)
+%Pint data of the Player
+printPlayer([Wall,PatternLines,Suelo,Score,Strategy]):-print('  Score: '),print(Score),nl,print('--------'),nl.
