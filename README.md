@@ -234,6 +234,25 @@ scoreTotalFloor (Floor, Score)
 ```
 Gives the total score to be subtracted from the number of tiles on the Floor.
 
+### 6 Game
+Game is the main structure of the project, it only takes the number of players to start (between 2 and 4 players). It is designed in four phases:
+* **Prepare Game**: It is in charge of initializing the table with the initialization methods of each structure already mentioned (Players, Bag, Factories, Center, Cover).
+* **Play**: This phase is the heart of the game here is where each round is played until someone completes a row.
+* **Extra Points**: When a game is over, calculate the extra points each player has. If a row (2 points), a column (7 points) or color (10 points) was completed on the wall.
+* **Determine Winners**: After finishing the game and each player having their extra score, say who or who are the winners
+
+### 7. Play
+The Play phase of the game as mentioned above is the heart of this implementation. This phase has three stages:
+* **7.1.** Factory Offer:
+This is where the players decide their strategies and follow them, selecting tiles either from factories or centers and placing them on their board, on the Pattern Lines and if necessary on the Floor or on the Cover, until the end of the round, the strategy that each player performs is the number given from the start of the game.
+```
+Player— [Wall, Pattern_Lines, Floor, Score, Strategy]
+```
+* **7.2.** Tile Walls:
+After finishing each round, the lines filled with the player's Pattern Lines are moved to the corresponding place on the wall of this, return the remaining tiles to the Cover. The basic scores are calculated by rounds.
+* **7.3.** Preparing Next Round:
+Make the necessary preparations to start a new round. Fill the factories, check if the bag has to be flattened
+
 ## Strategy
 The Strategy structure has a strategy selection method, depending on the number that the player has, in case of wanting to add a new strategy, with the same arguments, it is given a number that is not used by other strategies and can be assigned to any player. The idea was to get all the possible and valid plays and depending on the strategy select one of them.
 * **1. Easy**
